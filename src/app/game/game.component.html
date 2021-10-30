@@ -1,0 +1,33 @@
+<div class="float-end detailsTile">
+  <p>Active Cases: {{details?.local_active_cases}}</p>
+  <p>Deaths: {{details?.local_deaths}}</p>
+  <p>New Cases: {{details?.local_new_cases}}</p>
+  <p>New Deaths: {{details?.local_new_deaths}}</p>
+  <p>Recovered: {{details?.local_recovered}}</p>
+  <p>Total Cases: {{details?.local_total_cases}}</p>
+</div>
+
+<div [@show]="animating" class="mainDiv">
+
+  <p class="text-center fw-bold title">Math Match Game</p>
+
+  <div class="mt-2 w-100 d-flex justify-content-between align-items-center" style="margin-bottom: 5px">
+    <p class="bg-danger fw-bold text-light timeOut" style="margin: 0">08:00</p>
+    <button class="btn btn-primary" (click)="clear()">New Game</button>
+  </div>
+
+  <div class="position-relative">
+    <div class="row">
+      <div *ngFor="let data of array;let i = index"
+           class="col-3 cardsSecond">{{data}}
+      </div>
+    </div>
+
+    <div class="row position-absolute" style="top: 0">
+      <div (click)="changeState(i)" [@card]="currentState[i]" *ngFor="let data of array;let i = index"
+           class="col-3 cards">?
+      </div>
+    </div>
+  </div>
+
+</div>

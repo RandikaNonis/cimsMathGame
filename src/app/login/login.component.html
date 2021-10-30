@@ -1,0 +1,18 @@
+<div [@opacity]=login class="container mainDiv">
+  <h1 class="fntColors">Math</h1>
+  <h1 class="fntColors">Match</h1>
+  <h1 class="fntColors">Game...</h1>
+  <p class="fntColors">Test your memory AND your math skills, all in one game!</p>
+  <div class="form-group">
+    <label class="fntColors" style="font-weight: bold" for="exampleInputEmail1">Username</label>
+    <input placeholder="username here" type="email" class="form-control" id="exampleInputEmail1"
+           aria-describedby="emailHelp" (keyup.enter)="passwordInput.select()">
+  </div>
+  <div class="form-group">
+    <label class="fntColors" style="font-weight: bold" for="exampleInputPassword1">Password</label>
+    <input placeholder="password here" type="password" class="form-control"
+           id="exampleInputPassword1" #passwordInput>
+  </div>
+  <button routerLink="/game" type="button" class="btn btn-outline-primary loginBtn">Login
+  </button>
+</div>
