@@ -9,6 +9,8 @@ import {LoginComponent} from './login/login.component';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
+import {NgxSpinnerModule} from 'ngx-spinner';
+import {AlertModule} from 'ngx-alerts';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,10 @@ import {HttpClientModule} from '@angular/common/http';
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxSpinnerModule,
+    // @ts-ignore
+    AlertModule.forRoot({maxMessages: 5, timeout: 5000, position: 'right'})
   ],
   providers: [],
   bootstrap: [AppComponent]

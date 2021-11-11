@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {CoronaService} from '../corona.service';
+import {NgxSpinnerService} from "ngx-spinner";
+import {AlertService} from "ngx-alerts";
 
 @Component({
   selector: 'app-game',
@@ -34,33 +36,41 @@ export class GameComponent implements OnInit {
     clickedValue: 0,
     recentIndex: 0,
     lastIndex: 0,
+    recentType: '',
+    lastType: ''
   };
 
   pointerEvent = false;
   interval;
 
-  constructor(private service: CoronaService) {
+  constructor(private service: CoronaService, private spinner: NgxSpinnerService, private alertService: AlertService) {
   }
 
   // tslint:disable-next-line:typedef
   async ngOnInit() {
-    this.setMathematicalPart();
+    this.spinner.show();
+    await this.setMathematicalPart();
     setTimeout(() => {
       this.animating = 'down';
-      this.runTheCountDown();
     }, 100);
     this.service.getCurrentDetailsOfCoronaPandemic().subscribe(res => {
       this.details = res?.data;
     });
+    setTimeout(() => {
+      this.spinner.hide();
+      this.runTheCountDown();
+    }, 2000);
   }
 
   // tslint:disable-next-line:typedef
-  async setMathematicalPart() {
-    this.array = [];
-    await this.makeCalculations();
-    const answers = await this.setAnswers();
-    this.array = this.array.concat(answers);
-    console.log(this.array);
+  setMathematicalPart() {
+    return new Promise(async resolve => {
+      this.array = [];
+      await this.makeCalculations();
+      const answers = await this.setAnswers();
+      this.shuffle(this.array.concat(answers));
+      resolve();
+    });
   }
 
   // tslint:disable-next-line:typedef
@@ -106,10 +116,11 @@ export class GameComponent implements OnInit {
       await new Promise(resolve => {
         for (let i = 0; i < 2; i++) {
           const firstOne = Math.floor(Math.random() * 10);
+          const min = Math.ceil(1);
           this.array.push(
             {
               type: 'C',
-              show: firstOne + '/' + Math.floor(Math.random() * firstOne)
+              show: firstOne + '/' + Math.floor(Math.random() * (firstOne - min) + min)
             });
           if (i + 1 === 2) {
             resolve();
@@ -122,7 +133,6 @@ export class GameComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   async setAnswers() {
-
     const answers = [];
 
     return new Promise(resolve => {
@@ -137,6 +147,26 @@ export class GameComponent implements OnInit {
         }
       }
     });
+  }
+
+  shuffle(array) {
+    console.log(array);
+    let currentIndex = array.length, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (currentIndex !== 0) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+
+    this.array = array;
+    console.log(this.array);
   }
 
   runTheCountDown(): void {
@@ -180,7 +210,8 @@ export class GameComponent implements OnInit {
         document.getElementById('minutesTwo').innerHTML = '0';
         document.getElementById('secondsOne').innerHTML = '0';
         document.getElementById('secondsTwo').innerHTML = '0';
-        alert('Game Over');
+        this.alertService.danger('Game Over');
+        this.pointerEvent = true;
       }
 
     }, 1000);
@@ -191,8 +222,10 @@ export class GameComponent implements OnInit {
 
     this.clickedTile.clickedRound += 1;
     this.clickedTile.recentValue = this.clickedTile.clickedValue;
+    this.clickedTile.recentType = this.clickedTile.lastType;
     // tslint:disable-next-line:no-eval
     this.clickedTile.clickedValue = eval(this.array[index]?.show);
+    this.clickedTile.lastType = this.array[index]?.type;
     this.clickedTile.recentIndex = this.clickedTile?.lastIndex;
     this.clickedTile.lastIndex = index;
 
@@ -200,7 +233,8 @@ export class GameComponent implements OnInit {
       if (this.clickedTile?.clickedRound % 2 === 0) {
         this.pointerEvent = true;
         // tslint:disable-next-line:no-eval
-        if (this.clickedTile.clickedValue !== this.clickedTile.recentValue) {
+        if ((this.clickedTile.clickedValue !== this.clickedTile.recentValue) ||
+          (this.clickedTile?.recentType === this.clickedTile?.lastType)) {
           setTimeout(() => {
             this.currentState[this.clickedTile.recentIndex] = 'normal';
             this.currentState[index] = 'normal';
@@ -214,24 +248,32 @@ export class GameComponent implements OnInit {
     } else {
       setTimeout(() => {
         clearInterval(this.interval);
-        alert('Won the game');
+        this.alertService.success('Congratulations ! You won');
       }, 1000);
     }
   }
 
-  clear(): void {
+  // tslint:disable-next-line:typedef
+  async clear() {
+    this.spinner.show();
     for (let i = 0; i < this.currentState.length; i++) {
       this.currentState[i] = 'normal';
     }
-    this.setMathematicalPart();
+    await this.setMathematicalPart();
+    this.pointerEvent = false;
     this.clickedTile = {
       clickedRound: 0,
       recentValue: 0,
       clickedValue: 0,
       recentIndex: 0,
       lastIndex: 0,
+      recentType: '',
+      lastType: ''
     };
     clearInterval(this.interval);
     this.runTheCountDown();
+    setTimeout(() => {
+      this.spinner.hide();
+    }, 2000);
   }
 }
