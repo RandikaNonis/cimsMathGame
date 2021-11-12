@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {CoronaService} from '../corona.service';
-import {NgxSpinnerService} from "ngx-spinner";
-import {AlertService} from "ngx-alerts";
+import {NgxSpinnerService} from 'ngx-spinner';
+import {AlertService} from 'ngx-alerts';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-game',
@@ -77,7 +78,7 @@ export class GameComponent implements OnInit {
   makeCalculations() {
     return new Promise(async resolve => {
       await new Promise(resolve => {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 4; i++) {
           this.array.push(
             {
               type: 'C',
@@ -102,7 +103,7 @@ export class GameComponent implements OnInit {
         }
       });
       await new Promise(resolve => {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 3; i++) {
           this.array.push(
             {
               type: 'C',
@@ -113,20 +114,20 @@ export class GameComponent implements OnInit {
           }
         }
       });
-      await new Promise(resolve => {
-        for (let i = 0; i < 2; i++) {
-          const firstOne = Math.floor(Math.random() * 10);
-          const min = Math.ceil(1);
-          this.array.push(
-            {
-              type: 'C',
-              show: firstOne + '/' + Math.floor(Math.random() * (firstOne - min) + min)
-            });
-          if (i + 1 === 2) {
-            resolve();
-          }
-        }
-      });
+      // await new Promise(resolve => {
+      //   for (let i = 0; i < 2; i++) {
+      //     const firstOne = Math.floor(Math.random() * 10);
+      //     const min = Math.ceil(1);
+      //     this.array.push(
+      //       {
+      //         type: 'C',
+      //         show: firstOne + '/' + Math.floor(Math.random() * (firstOne - min) + min)
+      //       });
+      //     if (i + 1 === 2) {
+      //       resolve();
+      //     }
+      //   }
+      // });
       resolve();
     });
   }
@@ -149,8 +150,8 @@ export class GameComponent implements OnInit {
     });
   }
 
+  // tslint:disable-next-line:typedef
   shuffle(array) {
-    console.log(array);
     let currentIndex = array.length, randomIndex;
 
     // While there remain elements to shuffle...
@@ -166,7 +167,6 @@ export class GameComponent implements OnInit {
     }
 
     this.array = array;
-    console.log(this.array);
   }
 
   runTheCountDown(): void {
@@ -210,7 +210,12 @@ export class GameComponent implements OnInit {
         document.getElementById('minutesTwo').innerHTML = '0';
         document.getElementById('secondsOne').innerHTML = '0';
         document.getElementById('secondsTwo').innerHTML = '0';
-        this.alertService.danger('Game Over');
+        Swal.fire({
+          title: 'Info!',
+          text: 'Game over',
+          icon: 'info',
+          confirmButtonText: 'Cool'
+        });
         this.pointerEvent = true;
       }
 
@@ -248,7 +253,12 @@ export class GameComponent implements OnInit {
     } else {
       setTimeout(() => {
         clearInterval(this.interval);
-        this.alertService.success('Congratulations ! You won');
+        Swal.fire({
+          title: 'Success!',
+          text: 'Congratulations ! You won',
+          icon: 'success',
+          confirmButtonText: 'Cool'
+        });
       }, 1000);
     }
   }

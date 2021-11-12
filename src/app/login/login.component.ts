@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
+// ES6 Modules or TypeScript
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
