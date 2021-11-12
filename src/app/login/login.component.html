@@ -5,14 +5,14 @@
   <p class="fntColors">Test your memory AND your math skills, all in one game!</p>
   <div class="form-group">
     <label class="fntColors" style="font-weight: bold" for="exampleInputEmail1">Username</label>
-    <input placeholder="username here" type="email" class="form-control" id="exampleInputEmail1"
+    <input [(ngModel)]="userName" placeholder="username here" type="email" class="form-control" id="exampleInputEmail1"
            aria-describedby="emailHelp" (keyup.enter)="passwordInput.select()">
   </div>
   <div class="form-group">
     <label class="fntColors" style="font-weight: bold" for="exampleInputPassword1">Password</label>
-    <input placeholder="password here" type="password" class="form-control"
+    <input [(ngModel)]="password" placeholder="password here" type="password" class="form-control"
            id="exampleInputPassword1" #passwordInput>
   </div>
-  <button routerLink="/game" type="button" class="btn btn-outline-primary loginBtn">Login
+  <button (click)="submit()" type="button" class="btn btn-outline-primary loginBtn">Login
   </button>
 </div>
