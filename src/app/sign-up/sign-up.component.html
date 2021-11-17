@@ -1,0 +1,34 @@
+<div [@opacity]=signUp class="container mainDiv">
+  <h1 class="fntColors">Math</h1>
+  <h1 class="fntColors">Match</h1>
+  <h1 class="fntColors">Game...</h1>
+  <p class="fntColors">Test your memory AND your math skills, all in one game!</p>
+  <div class="form-group">
+    <label class="fntColors" style="font-weight: bold" for="firstName">First Name</label>
+    <input [(ngModel)]="firstName" placeholder="first name here" type="email" class="form-control" id="firstName"
+           aria-describedby="emailHelp" (keyup.enter)="lastNameInput.select()">
+  </div>
+  <div class="form-group">
+    <label class="fntColors" style="font-weight: bold" for="lastName">Last Name</label>
+    <input [(ngModel)]="lastName" placeholder="last name here" type="email" class="form-control" id="lastName"
+           aria-describedby="emailHelp" #lastNameInput (keyup.enter)="userNameInput.select()">
+  </div>
+  <div class="form-group">
+    <label class="fntColors" style="font-weight: bold" for="userName">Username</label>
+    <input [(ngModel)]="userName" placeholder="username here" type="email" class="form-control" id="userName"
+           aria-describedby="emailHelp" #userNameInput (keyup.enter)="passwordInput.select()">
+  </div>
+  <div class="form-group">
+    <label class="fntColors" style="font-weight: bold" for="password">Password</label>
+    <input [(ngModel)]="password" placeholder="password here" type="password" class="form-control"
+           id="password" #passwordInput (keyup.enter)="reEnterPasswordInput.select()">
+  </div>
+  <div class="form-group">
+    <label class="fntColors" style="font-weight: bold" for="reEnterPassword">Re-enter Password</label>
+    <input [(ngModel)]="reEnterPassword" placeholder="password here" type="password" class="form-control"
+           id="reEnterPassword" #reEnterPasswordInput>
+  </div>
+  <button (click)="submit()" type="button" class="btn btn-outline-primary loginBtn">SUBMIT
+  </button>
+  <p routerLink="/login" style="cursor: pointer" class="text-center pt-2">Already have an account?</p>
+</div>

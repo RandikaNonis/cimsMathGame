@@ -22,7 +22,6 @@
   padding: 10px;
   background: darkgrey;
   font-weight: bold;
-  font-family: cursive;
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(10px);
@@ -34,7 +33,6 @@
 .title {
   font-size: 25px;
   color: darkblue;
-  font-family: cursive;
 }
 
 .timeOut {
