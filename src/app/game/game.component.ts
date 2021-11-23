@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {CoronaService} from '../corona.service';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {AlertService} from 'ngx-alerts';
 import Swal from 'sweetalert2';
+import {GameService} from '../service/game.service';
 
 @Component({
   selector: 'app-game',
@@ -43,13 +43,15 @@ export class GameComponent implements OnInit {
 
   pointerEvent = false;
   interval;
+  level = 0;
 
-  constructor(private service: CoronaService, private spinner: NgxSpinnerService, private alertService: AlertService) {
+  constructor(private service: CoronaService, private spinner: NgxSpinnerService, private gameService: GameService) {
   }
 
   // tslint:disable-next-line:typedef
   async ngOnInit() {
     this.spinner.show();
+    this.level = (JSON.parse(sessionStorage.getItem('userDetails')))?.rank;
     await this.setMathematicalPart();
     setTimeout(() => {
       this.animating = 'down';
@@ -61,12 +63,14 @@ export class GameComponent implements OnInit {
       this.spinner.hide();
       this.runTheCountDown();
     }, 2000);
+    console.log(JSON.parse(sessionStorage.getItem('userDetails')));
   }
 
   // tslint:disable-next-line:typedef
   setMathematicalPart() {
     return new Promise(async resolve => {
       this.array = [];
+      console.log(this.level);
       await this.makeCalculations();
       const answers = await this.setAnswers();
       this.shuffle(this.array.concat(answers));
@@ -76,13 +80,15 @@ export class GameComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   makeCalculations() {
+    const min = Math.ceil(this.level);
     return new Promise(async resolve => {
       await new Promise(resolve => {
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 3; i++) {
           this.array.push(
             {
               type: 'C',
-              show: Math.floor(Math.random() * 10) + '+' + Math.floor(Math.random() * 10)
+              show: Math.floor(Math.random() * ((this.level * 10) - min) + min) + '+' +
+                Math.floor(Math.random() * ((this.level * 10) - min) + min)
             });
           if (i + 1 === 3) {
             resolve();
@@ -91,11 +97,11 @@ export class GameComponent implements OnInit {
       });
       await new Promise(resolve => {
         for (let i = 0; i < 3; i++) {
-          const firstOne = Math.floor(Math.random() * 10);
+          const firstOne = Math.floor(Math.random() * (this.level * 10));
           this.array.push(
             {
               type: 'C',
-              show: firstOne + '-' + Math.floor(Math.random() * firstOne)
+              show: firstOne + '-' + Math.floor(Math.random() * (firstOne - min) + min)
             });
           if (i + 1 === 3) {
             resolve();
@@ -103,31 +109,35 @@ export class GameComponent implements OnInit {
         }
       });
       await new Promise(resolve => {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
           this.array.push(
             {
               type: 'C',
-              show: Math.floor(Math.random() * 10) + '*' + Math.floor(Math.random() * 10)
+              show: Math.floor(Math.random() * ((this.level * 10) - min) + min) + '*' +
+                Math.floor(Math.random() * ((this.level * 10) - min) + min)
             });
           if (i + 1 === 2) {
             resolve();
           }
         }
       });
-      // await new Promise(resolve => {
-      //   for (let i = 0; i < 2; i++) {
-      //     const firstOne = Math.floor(Math.random() * 10);
-      //     const min = Math.ceil(1);
-      //     this.array.push(
-      //       {
-      //         type: 'C',
-      //         show: firstOne + '/' + Math.floor(Math.random() * (firstOne - min) + min)
-      //       });
-      //     if (i + 1 === 2) {
-      //       resolve();
-      //     }
-      //   }
-      // });
+      await new Promise(resolve => {
+        for (let i = 0; i < 2; i++) {
+          const firstOne = Math.floor(Math.random() * (this.level * 10));
+          let secondOne = 0;
+          while (firstOne % secondOne !== 0) {
+            secondOne = Math.floor(Math.random() * (firstOne - min) + min);
+          }
+          this.array.push(
+            {
+              type: 'C',
+              show: firstOne + '/' + secondOne
+            });
+          if (i + 1 === 2) {
+            resolve();
+          }
+        }
+      });
       resolve();
     });
   }
@@ -170,7 +180,7 @@ export class GameComponent implements OnInit {
   }
 
   runTheCountDown(): void {
-    const countDownDate: any = new Date(new Date().getTime() + (2 * 60000));
+    const countDownDate: any = new Date(new Date().getTime() + (this.level * 60000));
 
     this.interval = setInterval(() => {
 
@@ -251,15 +261,40 @@ export class GameComponent implements OnInit {
         }
       }
     } else {
-      setTimeout(() => {
-        clearInterval(this.interval);
-        Swal.fire({
-          title: 'Success!',
-          text: 'Congratulations ! You won',
-          icon: 'success',
-          confirmButtonText: 'Cool'
+      clearInterval(this.interval);
+      const data = {
+        username: (JSON.parse(sessionStorage.getItem('userDetails')))?.username
+      };
+      this.gameService.updateRank(data)
+        .subscribe(res => {
+          if (res) {
+            this.level += 1;
+            setTimeout(() => {
+              Swal.fire({
+                title: 'Success!',
+                text: 'Congratulations ! You won',
+                icon: 'success',
+                confirmButtonText: 'Cool'
+              });
+              this.clear();
+            }, 1000);
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Something went wrong',
+              icon: 'error',
+              confirmButtonText: 'Cool'
+            });
+          }
+        }, error1 => {
+          console.log(error1);
+          Swal.fire({
+            title: 'Error!',
+            text: 'Something went wrong',
+            icon: 'error',
+            confirmButtonText: 'Cool'
+          });
         });
-      }, 1000);
     }
   }
 

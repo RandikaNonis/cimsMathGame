@@ -7,6 +7,10 @@
   <p>Total Cases: {{details?.local_total_cases}}</p>
 </div>
 
+<div class="mx-2 float-start detailsTile">
+  <p style="margin: 0;font-size: 25px">Level: {{level}}</p>
+</div>
+
 <div [@show]="animating" class="mainDiv">
 
   <p class="text-center fw-bold title">Math Match Game</p>
@@ -25,8 +29,7 @@
   <div class="position-relative">
     <div class="row">
       <div *ngFor="let data of array;let i = index"
-           class="col-3 cardsSecond">{{data?.show}}
-      </div>
+           class="col-3 cardsSecond"><p style="margin: 0;font-size: 22px">{{data?.show}}</p></div>
     </div>
 
     <div class="row position-absolute" style="top: 0">

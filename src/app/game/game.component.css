@@ -58,9 +58,11 @@
   height: 60px;
   border: 1px solid gray;
   text-align: center;
-  font-size: 35px;
   color: black;
   cursor: pointer;
   transform: rotateY(0deg);
   opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

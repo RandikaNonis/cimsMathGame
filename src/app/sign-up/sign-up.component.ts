@@ -65,7 +65,14 @@ export class SignUpComponent implements OnInit {
         this.spinner.hide();
         console.log(res);
         if (res) {
-          this.router.navigate(['/login']);
+          Swal.fire({
+            title: 'Success!',
+            text: 'Successfully signed up',
+            icon: 'success'
+          });
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 1000);
         } else {
           Swal.fire({
             title: 'Info!',

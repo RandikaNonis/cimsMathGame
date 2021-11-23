@@ -22,4 +22,8 @@ export class GameService {
   getDetailsByUsername(username): Observable<any> {
     return this.http.get(environment.baseUrl + '/game/getUserByUserName/' + username);
   }
+
+  updateRank(username): Observable<any> {
+    return this.http.put(environment.baseUrl + '/game/updateLevel', username);
+  }
 }
