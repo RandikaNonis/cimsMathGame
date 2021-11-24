@@ -44,15 +44,35 @@ export class GameComponent implements OnInit {
   pointerEvent = false;
   interval;
   level = 0;
+  expression: any;
+  answer: any;
 
   constructor(private service: CoronaService, private spinner: NgxSpinnerService, private gameService: GameService) {
   }
 
   // tslint:disable-next-line:typedef
   async ngOnInit() {
+    console.log('start');
     this.spinner.show();
-    this.level = (JSON.parse(sessionStorage.getItem('userDetails')))?.rank;
+    await new Promise(resolve => {
+      this.gameService.getDetailsByUsername(localStorage.getItem('username')).subscribe((resp: any) => {
+        console.log(resp);
+        this.level = resp?.rank;
+        resolve();
+      }, error1 => {
+        this.spinner.hide();
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Cool'
+        });
+        console.log(error1);
+      });
+    });
+    console.log(this.level);
     await this.setMathematicalPart();
+    console.log('after mathematical part');
     setTimeout(() => {
       this.animating = 'down';
     }, 100);
@@ -68,10 +88,12 @@ export class GameComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   setMathematicalPart() {
+    console.log('came to set mathematical part');
     return new Promise(async resolve => {
       this.array = [];
-      console.log(this.level);
+      console.log('before make calculation');
       await this.makeCalculations();
+      console.log('after make calculation');
       const answers = await this.setAnswers();
       this.shuffle(this.array.concat(answers));
       resolve();
@@ -83,7 +105,7 @@ export class GameComponent implements OnInit {
     const min = Math.ceil(this.level);
     return new Promise(async resolve => {
       await new Promise(resolve => {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 4; i++) {
           this.array.push(
             {
               type: 'C',
@@ -96,8 +118,8 @@ export class GameComponent implements OnInit {
         }
       });
       await new Promise(resolve => {
-        for (let i = 0; i < 3; i++) {
-          const firstOne = Math.floor(Math.random() * (this.level * 10));
+        for (let i = 0; i < 4; i++) {
+          const firstOne = Math.floor(Math.random() * ((this.level * 10) - min) + min);
           this.array.push(
             {
               type: 'C',
@@ -121,23 +143,23 @@ export class GameComponent implements OnInit {
           }
         }
       });
-      await new Promise(resolve => {
-        for (let i = 0; i < 2; i++) {
-          const firstOne = Math.floor(Math.random() * (this.level * 10));
-          let secondOne = 0;
-          while (firstOne % secondOne !== 0) {
-            secondOne = Math.floor(Math.random() * (firstOne - min) + min);
-          }
-          this.array.push(
-            {
-              type: 'C',
-              show: firstOne + '/' + secondOne
-            });
-          if (i + 1 === 2) {
-            resolve();
-          }
-        }
-      });
+      // await new Promise(resolve => {
+      //   for (let i = 0; i < 2; i++) {
+      //     const firstOne = Math.floor(Math.random() * (this.level * 10));
+      //     let secondOne = 0;
+      //     while (firstOne % secondOne !== 0) {
+      //       secondOne = Math.floor(Math.random() * (firstOne - min) + min);
+      //     }
+      //     this.array.push(
+      //       {
+      //         type: 'C',
+      //         show: firstOne + '/' + secondOne
+      //       });
+      //     if (i + 1 === 2) {
+      //       resolve();
+      //     }
+      //   }
+      // });
       resolve();
     });
   }
@@ -180,7 +202,7 @@ export class GameComponent implements OnInit {
   }
 
   runTheCountDown(): void {
-    const countDownDate: any = new Date(new Date().getTime() + (this.level * 60000));
+    const countDownDate: any = new Date(new Date().getTime() + ((this.level + 1) * 60000));
 
     this.interval = setInterval(() => {
 
@@ -232,7 +254,7 @@ export class GameComponent implements OnInit {
     }, 1000);
   }
 
-  changeState(index: number): void {
+  async changeState(index: number): Promise<void> {
     this.currentState[index] = this.currentState[index] === 'normal' ? 'animated' : 'normal';
 
     this.clickedTile.clickedRound += 1;
@@ -261,40 +283,44 @@ export class GameComponent implements OnInit {
         }
       }
     } else {
+      console.log('won');
       clearInterval(this.interval);
       const data = {
         username: (JSON.parse(sessionStorage.getItem('userDetails')))?.username
       };
-      this.gameService.updateRank(data)
-        .subscribe(res => {
-          if (res) {
-            this.level += 1;
-            setTimeout(() => {
-              Swal.fire({
-                title: 'Success!',
-                text: 'Congratulations ! You won',
-                icon: 'success',
-                confirmButtonText: 'Cool'
-              });
-              this.clear();
-            }, 1000);
-          } else {
+      console.log('before run');
+      const response = await new Promise(resolve => {
+        this.gameService.updateRank(data)
+          .subscribe(res => {
+            if (res) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          }, error1 => {
+            console.log(error1);
             Swal.fire({
               title: 'Error!',
               text: 'Something went wrong',
               icon: 'error',
               confirmButtonText: 'Cool'
             });
-          }
-        }, error1 => {
-          console.log(error1);
-          Swal.fire({
-            title: 'Error!',
-            text: 'Something went wrong',
-            icon: 'error',
-            confirmButtonText: 'Cool'
           });
+      });
+      console.log('after run');
+      if (response) {
+        console.log('true');
+        this.level += 1;
+        this.clear();
+      } else {
+        console.log('false');
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Cool'
         });
+      }
     }
   }
 
@@ -321,4 +347,28 @@ export class GameComponent implements OnInit {
       this.spinner.hide();
     }, 2000);
   }
+
+  runTheExpression(): void {
+    this.spinner.show();
+    let calculation = this.expression;
+    if (this.expression.toString().includes('+')) {
+      calculation = this.expression.toString().replace('+', '%2B');
+    }
+    console.log(calculation);
+    this.gameService.getAnswer(calculation).subscribe(res => {
+      console.log(res);
+      this.spinner.hide();
+      this.answer = res;
+    }, error1 => {
+      this.spinner.hide();
+      console.log(error1);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Something went wrong',
+        icon: 'error',
+        confirmButtonText: 'Cool'
+      });
+    });
+  }
+
 }

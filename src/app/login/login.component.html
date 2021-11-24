@@ -11,7 +11,7 @@
   <div class="form-group">
     <label class="fntColors" style="font-weight: bold" for="exampleInputPassword1">Password</label>
     <input [(ngModel)]="password" placeholder="password here" type="password" class="form-control"
-           id="exampleInputPassword1" #passwordInput>
+           id="exampleInputPassword1" #passwordInput (keyup.enter)="submit()">
   </div>
   <button (click)="submit()" type="button" class="btn btn-outline-primary loginBtn">LOGIN
   </button>

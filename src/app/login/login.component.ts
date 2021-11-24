@@ -3,8 +3,8 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2';
 import {Router} from '@angular/router';
-import {NgxSpinnerService} from "ngx-spinner";
-import {GameService} from "../service/game.service";
+import {NgxSpinnerService} from 'ngx-spinner';
+import {GameService} from '../service/game.service';
 
 @Component({
   selector: 'app-login',
@@ -45,21 +45,7 @@ export class LoginComponent implements OnInit {
       this.spinner.show();
       this.gameService.login(this.userName, this.password).subscribe(async res => {
         if (res) {
-          await new Promise(resolve => {
-            this.gameService.getDetailsByUsername(this.userName).subscribe((resp: any) => {
-              sessionStorage.setItem('userDetails', JSON.stringify(resp));
-              resolve();
-            }, error1 => {
-              this.spinner.hide();
-              Swal.fire({
-                title: 'Error!',
-                text: 'Something went wrong',
-                icon: 'error',
-                confirmButtonText: 'Cool'
-              });
-              console.log(error1);
-            });
-          });
+          localStorage.setItem('username', this.userName);
           this.spinner.hide();
           this.router.navigate(['/game']);
         } else {

@@ -1,10 +1,13 @@
 <div class="float-end detailsTile">
-  <p>Active Cases: {{details?.local_active_cases}}</p>
-  <p>Deaths: {{details?.local_deaths}}</p>
-  <p>New Cases: {{details?.local_new_cases}}</p>
-  <p>New Deaths: {{details?.local_new_deaths}}</p>
-  <p>Recovered: {{details?.local_recovered}}</p>
-  <p>Total Cases: {{details?.local_total_cases}}</p>
+  <!--  <p>Active Cases: {{details?.local_active_cases}}</p>-->
+  <!--  <p>Deaths: {{details?.local_deaths}}</p>-->
+  <!--  <p>New Cases: {{details?.local_new_cases}}</p>-->
+  <!--  <p>New Deaths: {{details?.local_new_deaths}}</p>-->
+  <!--  <p>Recovered: {{details?.local_recovered}}</p>-->
+  <!--  <p>Total Cases: {{details?.local_total_cases}}</p>-->
+  <label for="expression" class="form-label">Expression</label>
+  <input (keyup.enter)="runTheExpression()" [(ngModel)]="expression" type="text" class="form-control" id="expression">
+  <p *ngIf="answer != undefined" class="pt-2">Answer: {{answer}}</p>
 </div>
 
 <div class="mx-2 float-start detailsTile">

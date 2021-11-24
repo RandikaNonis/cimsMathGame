@@ -26,4 +26,9 @@ export class GameService {
   updateRank(username): Observable<any> {
     return this.http.put(environment.baseUrl + '/game/updateLevel', username);
   }
+
+  getAnswer(expression): Observable<any> {
+    return this.http.get('http://api.mathjs.org/v4/?expr=' + expression);
+  }
+
 }
