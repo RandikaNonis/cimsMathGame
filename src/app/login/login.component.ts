@@ -39,31 +39,31 @@ export class LoginComponent implements OnInit {
         title: 'Info!',
         text: 'Fields can not be empty',
         icon: 'info',
-        confirmButtonText: 'Cool'
+        confirmButtonText: 'OK'
       });
     } else {
-      this.spinner.show();
+      this.spinner.show('mainSpinner');
       this.gameService.login(this.userName, this.password).subscribe(async res => {
         if (res) {
           localStorage.setItem('username', this.userName);
-          this.spinner.hide();
+          this.spinner.hide('mainSpinner');
           this.router.navigate(['/game']);
         } else {
-          this.spinner.hide();
+          this.spinner.hide('mainSpinner');
           Swal.fire({
             title: 'Error!',
             text: 'Invalid Credentials',
             icon: 'error',
-            confirmButtonText: 'Cool'
+            confirmButtonText: 'OK'
           });
         }
       }, error1 => {
-        this.spinner.hide();
+        this.spinner.hide('mainSpinner');
         Swal.fire({
           title: 'Error!',
           text: 'Something went wrong',
           icon: 'error',
-          confirmButtonText: 'Cool'
+          confirmButtonText: 'OK'
         });
         console.log(error1);
       });

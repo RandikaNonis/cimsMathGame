@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Router} from "@angular/router";
-import {GameService} from "../service/game.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import Swal from "sweetalert2";
+import {Router} from '@angular/router';
+import {GameService} from '../service/game.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sign-up',
@@ -42,14 +42,14 @@ export class SignUpComponent implements OnInit {
         title: 'Info!',
         text: 'Fields can not be empty',
         icon: 'info',
-        confirmButtonText: 'Cool'
+        confirmButtonText: 'OK'
       });
     } else if (this.password !== this.reEnterPassword) {
       Swal.fire({
         title: 'Info!',
         text: 'Passwords are not matching',
         icon: 'info',
-        confirmButtonText: 'Cool'
+        confirmButtonText: 'OK'
       });
     } else {
       const data = {
@@ -60,9 +60,9 @@ export class SignUpComponent implements OnInit {
         highestScore: 0,
         rank: 0
       };
-      this.spinner.show();
+      this.spinner.show('mainSpinner');
       this.gameService.signUp(data).subscribe(res => {
-        this.spinner.hide();
+        this.spinner.hide('mainSpinner');
         console.log(res);
         if (res) {
           Swal.fire({
@@ -78,16 +78,16 @@ export class SignUpComponent implements OnInit {
             title: 'Info!',
             text: 'Username already exist',
             icon: 'info',
-            confirmButtonText: 'Cool'
+            confirmButtonText: 'OK'
           });
         }
       }, error1 => {
-        this.spinner.hide();
+        this.spinner.hide('mainSpinner');
         Swal.fire({
           title: 'Error!',
           text: 'Something went wrong',
           icon: 'error',
-          confirmButtonText: 'Cool'
+          confirmButtonText: 'OK'
         });
         console.log(error1);
       });

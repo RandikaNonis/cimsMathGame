@@ -53,19 +53,19 @@ export class GameComponent implements OnInit {
   // tslint:disable-next-line:typedef
   async ngOnInit() {
     console.log('start');
-    this.spinner.show();
+    this.spinner.show('mainSpinner');
     await new Promise(resolve => {
       this.gameService.getDetailsByUsername(localStorage.getItem('username')).subscribe((resp: any) => {
         console.log(resp);
         this.level = resp?.rank;
         resolve();
       }, error1 => {
-        this.spinner.hide();
+        this.spinner.hide('mainSpinner');
         Swal.fire({
           title: 'Error!',
           text: 'Something went wrong',
           icon: 'error',
-          confirmButtonText: 'Cool'
+          confirmButtonText: 'OK'
         });
         console.log(error1);
       });
@@ -80,10 +80,10 @@ export class GameComponent implements OnInit {
       this.details = res?.data;
     });
     setTimeout(() => {
-      this.spinner.hide();
+      this.spinner.hide('mainSpinner');
       this.runTheCountDown();
     }, 2000);
-    console.log(JSON.parse(sessionStorage.getItem('userDetails')));
+    console.log(localStorage.getItem('username'));
   }
 
   // tslint:disable-next-line:typedef
@@ -246,7 +246,7 @@ export class GameComponent implements OnInit {
           title: 'Info!',
           text: 'Game over',
           icon: 'info',
-          confirmButtonText: 'Cool'
+          confirmButtonText: 'OK'
         });
         this.pointerEvent = true;
       }
@@ -286,12 +286,13 @@ export class GameComponent implements OnInit {
       console.log('won');
       clearInterval(this.interval);
       const data = {
-        username: (JSON.parse(sessionStorage.getItem('userDetails')))?.username
+        username: localStorage.getItem('username')
       };
       console.log('before run');
       const response = await new Promise(resolve => {
         this.gameService.updateRank(data)
           .subscribe(res => {
+            console.log(res);
             if (res) {
               resolve(true);
             } else {
@@ -303,11 +304,12 @@ export class GameComponent implements OnInit {
               title: 'Error!',
               text: 'Something went wrong',
               icon: 'error',
-              confirmButtonText: 'Cool'
+              confirmButtonText: 'OK'
             });
           });
       });
       console.log('after run');
+      console.log(response);
       if (response) {
         console.log('true');
         this.level += 1;
@@ -318,7 +320,7 @@ export class GameComponent implements OnInit {
           title: 'Error!',
           text: 'Something went wrong',
           icon: 'error',
-          confirmButtonText: 'Cool'
+          confirmButtonText: 'OK'
         });
       }
     }
@@ -326,7 +328,7 @@ export class GameComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   async clear() {
-    this.spinner.show();
+    this.spinner.show('mainSpinner');
     for (let i = 0; i < this.currentState.length; i++) {
       this.currentState[i] = 'normal';
     }
@@ -344,12 +346,12 @@ export class GameComponent implements OnInit {
     clearInterval(this.interval);
     this.runTheCountDown();
     setTimeout(() => {
-      this.spinner.hide();
+      this.spinner.hide('mainSpinner');
     }, 2000);
   }
 
   runTheExpression(): void {
-    this.spinner.show();
+    this.spinner.show('forCalculation');
     let calculation = this.expression;
     if (this.expression.toString().includes('+')) {
       calculation = this.expression.toString().replace('+', '%2B');
@@ -357,17 +359,11 @@ export class GameComponent implements OnInit {
     console.log(calculation);
     this.gameService.getAnswer(calculation).subscribe(res => {
       console.log(res);
-      this.spinner.hide();
+      this.spinner.hide('forCalculation');
       this.answer = res;
     }, error1 => {
-      this.spinner.hide();
+      this.spinner.hide('forCalculation');
       console.log(error1);
-      Swal.fire({
-        title: 'Error!',
-        text: 'Something went wrong',
-        icon: 'error',
-        confirmButtonText: 'Cool'
-      });
     });
   }
 

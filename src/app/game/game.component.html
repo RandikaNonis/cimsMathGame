@@ -5,9 +5,12 @@
   <!--  <p>New Deaths: {{details?.local_new_deaths}}</p>-->
   <!--  <p>Recovered: {{details?.local_recovered}}</p>-->
   <!--  <p>Total Cases: {{details?.local_total_cases}}</p>-->
-  <label for="expression" class="form-label">Expression</label>
-  <input (keyup.enter)="runTheExpression()" [(ngModel)]="expression" type="text" class="form-control" id="expression">
+  <label for="expression" class="form-label">Calculation (Ex: 12+8)</label>
+  <input (keyup.enter)="runTheExpression()" [(ngModel)]="expression" type="text" class="form-control" id="expression"
+         placeholder="enter your calculation here">
   <p *ngIf="answer != undefined" class="pt-2">Answer: {{answer}}</p>
+  <ngx-spinner name="forCalculation" bdColor="rgba(0, 0, 0, 0.8)" size="small" color="#fff"
+               type="square-jelly-box"></ngx-spinner>
 </div>
 
 <div class="mx-2 float-start detailsTile">
