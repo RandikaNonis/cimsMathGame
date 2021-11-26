@@ -204,7 +204,7 @@ export class GameComponent implements OnInit {
   }
 
   runTheCountDown(): void {
-    const countDownDate: any = new Date(new Date().getTime() + ((this.level + 1) * 60000));
+    const countDownDate: any = new Date(new Date().getTime() + (3 * 60000));
 
     this.interval = setInterval(() => {
 
