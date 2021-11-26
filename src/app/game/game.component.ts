@@ -4,6 +4,7 @@ import {CoronaService} from '../corona.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import {GameService} from '../service/game.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-game',
@@ -47,7 +48,8 @@ export class GameComponent implements OnInit {
   expression: any;
   answer: any;
 
-  constructor(private service: CoronaService, private spinner: NgxSpinnerService, private gameService: GameService) {
+  constructor(private service: CoronaService, private spinner: NgxSpinnerService, private gameService: GameService,
+              private router: Router) {
   }
 
   // tslint:disable-next-line:typedef
@@ -313,7 +315,9 @@ export class GameComponent implements OnInit {
       if (response) {
         console.log('true');
         this.level += 1;
-        this.clear();
+        setTimeout(() => {
+          this.clear();
+        }, 1000);
       } else {
         console.log('false');
         Swal.fire({
@@ -367,4 +371,9 @@ export class GameComponent implements OnInit {
     });
   }
 
+  logout(): void {
+    clearInterval(this.interval);
+    localStorage.removeItem('username');
+    this.router.navigate(['/login']);
+  }
 }
