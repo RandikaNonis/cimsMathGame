@@ -19,7 +19,8 @@
   </div>
 
   <div class="text-end pe-3 pt-3">
-    <i style="font-size: 25px;cursor: pointer" class="far fa-question-circle"></i>
+    <i data-bs-toggle="modal" data-bs-target="#exampleModal" style="font-size: 25px;cursor: pointer"
+       class="far fa-question-circle"></i>
   </div>
 </div>
 
@@ -56,4 +57,28 @@
     </div>
   </div>
 
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Game Manual</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>1. The game needs the player to find the answers to the sums.</p>
+        <p>2. The grid consists of 20 closed squares. (10 sums and 10 answers)</p>
+        <p>3. The player is able to click on any closed squares.</p>
+        <p>4. Once the player clicks the closed square, it will show a sum or an answer.</p>
+        <p>5. If the player finds the square that has the answer to the sum or sum of the answer in the very next click,
+          both squares will remain open. If not, both squares will be closed.</p>
+        <p>6. The player must open all 20 squares in the grid within 3 minutes.</p>
+        <p>7. For ease of use, the player is provided with a calculator to calculate difficult sums.</p>
+        <p>8. The player will be moved to the next level only if he/she completes the grid within the given time.</p>
+        <p>9. If the player continues to move forward, the hardness of the game will increase.</p>
+      </div>
+    </div>
+  </div>
 </div>
