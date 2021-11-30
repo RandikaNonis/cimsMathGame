@@ -4,10 +4,12 @@ import {GameComponent} from './game/game.component';
 import {LoginComponent} from './login/login.component';
 import {SignUpComponent} from './sign-up/sign-up.component';
 import {AuthGuard} from './auth.guard';
+import {IntroComponent} from './intro/intro.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: '/game', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
+  {path: 'intro', component: IntroComponent},
   {path: 'signUp', component: SignUpComponent},
   {path: 'game', component: GameComponent, canActivate: [AuthGuard]},
 ];

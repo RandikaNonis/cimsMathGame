@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
         if (res) {
           localStorage.setItem('username', this.userName);
           this.spinner.hide('mainSpinner');
-          this.router.navigate(['/game']);
+          this.router.navigate(['/intro']);
         } else {
           this.spinner.hide('mainSpinner');
           Swal.fire({

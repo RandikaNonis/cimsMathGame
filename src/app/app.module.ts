@@ -12,13 +12,15 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {AlertModule} from 'ngx-alerts';
 import {SignUpComponent} from './sign-up/sign-up.component';
+import {IntroComponent} from './intro/intro.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameComponent,
     LoginComponent,
-    SignUpComponent
+    SignUpComponent,
+    IntroComponent
   ],
   imports: [
     BrowserModule,
