@@ -314,8 +314,8 @@ export class GameComponent implements OnInit {
       console.log(response);
       if (response) {
         console.log('true');
-        this.level += 1;
         setTimeout(() => {
+          this.level += 1;
           this.clear();
         }, 1000);
       } else {
