@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {GameComponent} from './game/game.component';
-import {LoginComponent} from './login/login.component';
-import {SignUpComponent} from './sign-up/sign-up.component';
+import {GameComponent} from './components/game/game.component';
+import {LoginComponent} from './components/login/login.component';
+import {SignUpComponent} from './components/sign-up/sign-up.component';
 import {AuthGuard} from './auth.guard';
-import {IntroComponent} from './intro/intro.component';
+import {IntroComponent} from './components/intro/intro.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: '/game', pathMatch: 'full'},

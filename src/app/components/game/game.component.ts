@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {CoronaService} from '../corona.service';
+import {CoronaService} from '../../corona.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import Swal from 'sweetalert2';
-import {GameService} from '../service/game.service';
+import {GameService} from '../../service/game.service';
 import {Router} from '@angular/router';
+import {UserDetailsDTO} from '../../dto/UserDetailsDTO';
 
 @Component({
   selector: 'app-game',
@@ -57,19 +58,20 @@ export class GameComponent implements OnInit {
     this.spinner.show('mainSpinner');
     // get user details by username
     await new Promise(resolve => {
-      this.gameService.getDetailsByUsername(localStorage.getItem('username')).subscribe((resp: any) => {
-        this.level = resp?.rank;
-        resolve();
-      }, error1 => {
-        this.spinner.hide('mainSpinner');
-        Swal.fire({
-          title: 'Error!',
-          text: 'Something went wrong',
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
+      this.gameService.getDetailsByUsername(localStorage.getItem('username')).subscribe(
+        (resp: UserDetailsDTO) => {
+          this.level = resp?.rank;
+          resolve();
+        }, error1 => {
+          this.spinner.hide('mainSpinner');
+          Swal.fire({
+            title: 'Error!',
+            text: 'Something went wrong',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
 
-      });
+        });
     });
     await this.setMathematicalPart();
     setTimeout(() => {

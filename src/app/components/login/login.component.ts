@@ -4,7 +4,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import Swal from 'sweetalert2';
 import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {GameService} from '../service/game.service';
+import {GameService} from '../../service/game.service';
 
 @Component({
   selector: 'app-login',
