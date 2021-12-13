@@ -1,20 +1,32 @@
+<!--start main login component-->
 <div [@opacity]=login class="container mainDiv">
   <h1 class="fntColors">Math</h1>
   <h1 class="fntColors">Match</h1>
   <h1 class="fntColors">Game...</h1>
   <p class="fntColors">Test your memory AND your math skills, all in one game!</p>
+  <!--  start username field-->
   <div class="form-group">
     <label class="fntColors" style="font-weight: bold" for="exampleInputEmail1">Username</label>
     <input [(ngModel)]="userName" placeholder="username here" type="email" class="form-control" id="exampleInputEmail1"
            aria-describedby="emailHelp" (keyup.enter)="passwordInput.select()">
   </div>
+  <!--  end username field-->
+
+  <!--  start password field-->
   <div class="form-group">
     <label class="fntColors" style="font-weight: bold" for="exampleInputPassword1">Password</label>
     <input [(ngModel)]="password" placeholder="password here" type="password" class="form-control"
            id="exampleInputPassword1" #passwordInput (keyup.enter)="submit()">
   </div>
-  <button (click)="submit()" type="button" class="btn btn-outline-primary loginBtn">LOGIN
-  </button>
-  <button routerLink="/signUp" type="button" class="btn btn-outline-primary loginBtn">SIGN UP
-  </button>
+  <!--  end password field-->
+
+  <!--  start login button-->
+  <button (click)="submit()" type="button" class="btn btn-outline-primary loginBtn">LOGIN</button>
+  <!--  end login button-->
+
+  <!--  start navigation to sign up page-->
+  <button routerLink="/signUp" type="button" class="btn btn-outline-primary loginBtn">SIGN UP</button>
+  <!--  end navigation to sign up page-->
+
 </div>
+<!--end main login component-->

@@ -1,10 +1,5 @@
+<!--start top right div-->
 <div class="float-end">
-  <!--  <p>Active Cases: {{details?.local_active_cases}}</p>-->
-  <!--  <p>Deaths: {{details?.local_deaths}}</p>-->
-  <!--  <p>New Cases: {{details?.local_new_cases}}</p>-->
-  <!--  <p>New Deaths: {{details?.local_new_deaths}}</p>-->
-  <!--  <p>Recovered: {{details?.local_recovered}}</p>-->
-  <!--  <p>Total Cases: {{details?.local_total_cases}}</p>-->
   <div class="w-100 text-end pt-2 pe-2">
     <button (click)="logout()" class="btn btn-outline-primary">Logout</button>
   </div>
@@ -23,11 +18,15 @@
        class="far fa-question-circle"></i>
   </div>
 </div>
+<!--end top right div-->
 
+<!--start show level-->
 <div class="mx-2 float-start detailsTile">
   <p style="margin: 0;font-size: 25px">Level: {{level}}</p>
 </div>
+<!--end show level-->
 
+<!--start main game play part-->
 <div [@show]="animating" class="mainDiv">
 
   <p class="text-center fw-bold title">Math Match Game</p>
@@ -58,8 +57,9 @@
   </div>
 
 </div>
+<!--end main game play part-->
 
-<!-- Modal -->
+<!-- Start game manual modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -86,3 +86,4 @@
     </div>
   </div>
 </div>
+<!--end game manual modal-->

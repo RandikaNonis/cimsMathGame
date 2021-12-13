@@ -35,6 +35,7 @@ export class SignUpComponent implements OnInit {
     }, 1000);
   }
 
+  // register a new player
   submit(): void {
     if (this.firstName === '' || this.lastName === '' || this.userName === '' || this.password === '' ||
       this.reEnterPassword === '') {
@@ -63,7 +64,7 @@ export class SignUpComponent implements OnInit {
       this.spinner.show('mainSpinner');
       this.gameService.signUp(data).subscribe(res => {
         this.spinner.hide('mainSpinner');
-        console.log(res);
+
         if (res) {
           Swal.fire({
             title: 'Success!',
@@ -89,7 +90,6 @@ export class SignUpComponent implements OnInit {
           icon: 'error',
           confirmButtonText: 'OK'
         });
-        console.log(error1);
       });
     }
   }

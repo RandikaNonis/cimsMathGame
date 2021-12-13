@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     }, 1000);
   }
 
+  // check fields, credential to login
   submit(): void {
     if (this.userName === '' || this.password === '') {
       Swal.fire({
@@ -65,7 +66,6 @@ export class LoginComponent implements OnInit {
           icon: 'error',
           confirmButtonText: 'OK'
         });
-        console.log(error1);
       });
     }
   }

@@ -4,7 +4,7 @@ import {CoronaService} from '../corona.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import {GameService} from '../service/game.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -54,11 +54,10 @@ export class GameComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   async ngOnInit() {
-    console.log('start');
     this.spinner.show('mainSpinner');
+    // get user details by username
     await new Promise(resolve => {
       this.gameService.getDetailsByUsername(localStorage.getItem('username')).subscribe((resp: any) => {
-        console.log(resp);
         this.level = resp?.rank;
         resolve();
       }, error1 => {
@@ -69,39 +68,32 @@ export class GameComponent implements OnInit {
           icon: 'error',
           confirmButtonText: 'OK'
         });
-        console.log(error1);
+
       });
     });
-    console.log(this.level);
     await this.setMathematicalPart();
-    console.log('after mathematical part');
     setTimeout(() => {
       this.animating = 'down';
     }, 100);
-    this.service.getCurrentDetailsOfCoronaPandemic().subscribe(res => {
-      this.details = res?.data;
-    });
     setTimeout(() => {
       this.spinner.hide('mainSpinner');
       this.runTheCountDown();
     }, 2000);
-    console.log(localStorage.getItem('username'));
+
   }
 
   // tslint:disable-next-line:typedef
   setMathematicalPart() {
-    console.log('came to set mathematical part');
     return new Promise(async resolve => {
       this.array = [];
-      console.log('before make calculation');
       await this.makeCalculations();
-      console.log('after make calculation');
       const answers = await this.setAnswers();
       this.shuffle(this.array.concat(answers));
       resolve();
     });
   }
 
+  // create all calculations randomly
   // tslint:disable-next-line:typedef
   makeCalculations() {
     const min = Math.ceil(this.level);
@@ -145,27 +137,11 @@ export class GameComponent implements OnInit {
           }
         }
       });
-      // await new Promise(resolve => {
-      //   for (let i = 0; i < 2; i++) {
-      //     const firstOne = Math.floor(Math.random() * (this.level * 10));
-      //     let secondOne = 0;
-      //     while (firstOne % secondOne !== 0) {
-      //       secondOne = Math.floor(Math.random() * (firstOne - min) + min);
-      //     }
-      //     this.array.push(
-      //       {
-      //         type: 'C',
-      //         show: firstOne + '/' + secondOne
-      //       });
-      //     if (i + 1 === 2) {
-      //       resolve();
-      //     }
-      //   }
-      // });
       resolve();
     });
   }
 
+  // create all answers according to the calculations
   // tslint:disable-next-line:typedef
   async setAnswers() {
     const answers = [];
@@ -184,6 +160,7 @@ export class GameComponent implements OnInit {
     });
   }
 
+  // shuffle all calculations and answers
   // tslint:disable-next-line:typedef
   shuffle(array) {
     let currentIndex = array.length, randomIndex;
@@ -203,6 +180,7 @@ export class GameComponent implements OnInit {
     this.array = array;
   }
 
+  // run the countdown
   runTheCountDown(): void {
     const countDownDate: any = new Date(new Date().getTime() + (3 * 60000));
 
@@ -252,13 +230,12 @@ export class GameComponent implements OnInit {
         });
         this.pointerEvent = true;
       }
-
     }, 1000);
   }
 
+  // clicking and animation part
   async changeState(index: number): Promise<void> {
     this.currentState[index] = this.currentState[index] === 'normal' ? 'animated' : 'normal';
-
     this.clickedTile.clickedRound += 1;
     this.clickedTile.recentValue = this.clickedTile.clickedValue;
     this.clickedTile.recentType = this.clickedTile.lastType;
@@ -285,23 +262,21 @@ export class GameComponent implements OnInit {
         }
       }
     } else {
-      console.log('won');
+
       clearInterval(this.interval);
       const data = {
         username: localStorage.getItem('username')
       };
-      console.log('before run');
+
       const response = await new Promise(resolve => {
         this.gameService.updateRank(data)
           .subscribe(res => {
-            console.log(res);
             if (res) {
               resolve(true);
             } else {
               resolve(false);
             }
           }, error1 => {
-            console.log(error1);
             Swal.fire({
               title: 'Error!',
               text: 'Something went wrong',
@@ -310,16 +285,13 @@ export class GameComponent implements OnInit {
             });
           });
       });
-      console.log('after run');
-      console.log(response);
+
       if (response) {
-        console.log('true');
         setTimeout(() => {
           this.level += 1;
           this.clear();
         }, 1000);
       } else {
-        console.log('false');
         Swal.fire({
           title: 'Error!',
           text: 'Something went wrong',
@@ -330,6 +302,7 @@ export class GameComponent implements OnInit {
     }
   }
 
+  // clear and reset
   // tslint:disable-next-line:typedef
   async clear() {
     this.spinner.show('mainSpinner');
@@ -354,23 +327,23 @@ export class GameComponent implements OnInit {
     }, 2000);
   }
 
+  // external API
   runTheExpression(): void {
     this.spinner.show('forCalculation');
     let calculation = this.expression;
     if (this.expression.toString().includes('+')) {
       calculation = this.expression.toString().replace('+', '%2B');
     }
-    console.log(calculation);
+
     this.gameService.getAnswer(calculation).subscribe(res => {
-      console.log(res);
       this.spinner.hide('forCalculation');
       this.answer = res;
     }, error1 => {
       this.spinner.hide('forCalculation');
-      console.log(error1);
     });
   }
 
+  // logout function
   logout(): void {
     clearInterval(this.interval);
     localStorage.removeItem('username');
