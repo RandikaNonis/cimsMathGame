@@ -59,7 +59,7 @@ export class SignUpComponent implements OnInit {
         lastName: this.lastName,
         password: this.password,
         highestScore: 0,
-        rank: 0
+        rank: 1
       };
       this.spinner.show('mainSpinner');
       this.gameService.signUp(data).subscribe(res => {
