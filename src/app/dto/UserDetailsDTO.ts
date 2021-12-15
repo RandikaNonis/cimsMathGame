@@ -6,7 +6,8 @@ export class UserDetailsDTO {
   private _highestScore: number;
   private _rank: number;
 
-  constructor(username: string, firstName: string, lastName: string, password: string, highestScore: number, rank: number) {
+  constructor(username: string, firstName: string, lastName: string, password: string, highestScore: number,
+              rank: number) {
     this._username = username;
     this._firstName = firstName;
     this._lastName = lastName;
